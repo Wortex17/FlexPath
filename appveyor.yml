@@ -6,5 +6,5 @@ before_build:
 - choco install codecov
 
 test_script:
-- OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:".\FlexPath.Tests\bin\Debug\FlexPath.Tests.dll -noshadow" -filter:"+[FlexPath*]* -[FlexPath.Tests*]*" -output:".\FlexPath_coverage.xml"
+- OpenCover.Console.exe -register:user -target:"nunit3-console" -targetargs:".\FlexPath.Tests\bin\Debug\FlexPath.Tests.dll --result=myresults.xml;format=AppVeyor" -filter:"+[FlexPath*]* -[FlexPath.Tests*]*" -output:".\FlexPath_coverage.xml"
 - codecov -f "FlexPath_coverage.xml"
