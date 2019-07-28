@@ -1,8 +1,11 @@
 image: Visual Studio 2017
 
 init:
-- cmd: "set appVeyorBuildVersion=%appveyor_build_version%\necho appVeyorBuildVersion:%appVeyorBuildVersion% \n\nset branch=%APPVEYOR_REPO_BRANCH%\necho branch:%branch%\n\nset gitVersion=%branch:~-3%\necho gitversion:%gitVersion%\n\nset newVersion=%gitVersion%.%APPVEYOR_BUILD_NUMBER%\necho %newVersion%\n\n"
-- cmd: appveyor UpdateBuild -Version "%newVersion%"
+- cmd: "set ProductBaseVersion=1.0"
+- cmd: "echo ProductBaseVersion=%ProductBaseVersion%"
+- cmd: "set ProductVersion=%ProductBaseVersion%.%APPVEYOR_BUILD_NUMBER%-%branch%"
+- cmd: "echo ProductVersion=%ProductBuildVersion%"
+- cmd: appveyor UpdateBuild -Version "%ProductVersion%"
 
 before_build:
 - nuget restore
