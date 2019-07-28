@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Infrablack.FlexPath</id>
+    <version>$version$</version>
+    <title>FlexPath</title>
+    <authors>Patrick Michael Hopf</authors>
+    <owners>Patrick Michael Hopf</owners>
+	<license type="expression">MIT</license>
+    <projectUrl>https://github.com/Wortex17/FlexPath</projectUrl>
+	<repository type="git" url="https://github.com/Wortex17/FlexPath"/>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A flexible C# file/resource path building utility</description>
+    <copyright>Copyright © Patrick Michael Hopf 2019</copyright>
+    <tags>Path Uri Filesystem Reference</tags>
+  </metadata>
+</package>
