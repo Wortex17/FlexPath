@@ -44,6 +44,4 @@ deploy:
     secure: $(GITHUB_RELEASE_TOKEN_ENCRYPTED) # your encrypted token from GitHub
   artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
   on:
-    branch: master                 # release from master branch only
     APPVEYOR_REPO_TAG: true        # deploy on tag push only
-
