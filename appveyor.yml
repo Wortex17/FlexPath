@@ -1,4 +1,5 @@
 image: Visual Studio 2017
+configuration: Release
 
 init:
 - cmd: "set ProductBaseVersion=1.0"
