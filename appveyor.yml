@@ -3,8 +3,10 @@ image: Visual Studio 2017
 init:
 - cmd: "set ProductBaseVersion=1.0"
 - cmd: "echo ProductBaseVersion=%ProductBaseVersion%"
-- cmd: "set ProductVersion=%ProductBaseVersion%.%APPVEYOR_BUILD_NUMBER%-%branch%"
+- cmd: "set ProductVersion=%ProductBaseVersion%.%APPVEYOR_BUILD_NUMBER%"
 - cmd: "echo ProductVersion=%ProductVersion%"
+- cmd: "set ProductLongVersion=%ProductVersion%-%branch%"
+- cmd: "echo ProductLongVersion=%ProductLongVersion%"
 - cmd: appveyor UpdateBuild -Version "%ProductVersion%"
 
 assembly_info:
@@ -12,7 +14,7 @@ assembly_info:
   file: 'FlexPath*/Properties/AssemblyInfo.cs'
   assembly_version: "{version}"
   assembly_file_version: "{version}"
-  assembly_informational_version: "{version}"
+  assembly_informational_version: "$(ProductLongVersion)"
   
 before_build:
 - nuget restore
