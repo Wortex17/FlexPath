@@ -2,9 +2,9 @@ image: Visual Studio 2017
 configuration: Release
 
 init:
-- cmd: "set ProductBaseVersion=1.0"
+- cmd: "set ProductBaseVersion=0.1.0"
 - cmd: "echo ProductBaseVersion=%ProductBaseVersion%"
-- cmd: "set ProductVersion=%ProductBaseVersion%.%APPVEYOR_BUILD_NUMBER%"
+- cmd: "set ProductVersion=%ProductBaseVersion%+build.%APPVEYOR_BUILD_NUMBER%"
 - cmd: "echo ProductVersion=%ProductVersion%"
 - cmd: "set ProductLongVersion=%ProductVersion%-%APPVEYOR_REPO_BRANCH%"
 - cmd: "echo ProductLongVersion=%ProductLongVersion%"
@@ -30,8 +30,6 @@ build:
   publish_nuget: true
 
 artifacts:
-  - path: 'FlexPath\bin\Debug'
-    name: FlexPath.DBG
   - path: 'FlexPath\bin\Release'
     name: FlexPath
 
