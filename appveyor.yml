@@ -11,10 +11,10 @@ init:
 
 assembly_info:
   patch: true
-  file: "**/AssemblyInfo.cs"
+  file: "**\AssemblyInfo.cs"
   assembly_version: "{version}"
   assembly_file_version: "{version}"
-  assembly_informational_version: "$(ProductLongVersion)"
+  assembly_file_version: "$(ProductLongVersion)"
   
 before_build:
 - nuget restore
@@ -26,7 +26,7 @@ test_script:
 - codecov -f "FlexPath_coverage.xml"
 
 artifacts:
-  - path: FlexPath/bin/**/Debug
+  - path: FlexPath\bin\**\Debug
     name: FlexPath.DBG
-  - path: FlexPath/bin/**/Release
+  - path: FlexPath\bin\**\Release
     name: FlexPath
