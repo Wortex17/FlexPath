@@ -40,8 +40,7 @@ deploy:
   description: 'Release for version $(ProductLongVersion)'
   draft: true
   provider: GitHub
-  auth_token:
-    secure: $(GITHUB_RELEASE_TOKEN_ENCRYPTED) # your encrypted token from GitHub
+  auth_token: $(GITHUB_RELEASE_TOKEN_ENCRYPTED) # your encrypted token from GitHub
   artifact: /.*\.nupkg/            # upload all NuGet packages to release assets
   on:
     APPVEYOR_REPO_TAG: true        # deploy on tag push only
