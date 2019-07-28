@@ -5,7 +5,7 @@ init:
 - cmd: "echo ProductBaseVersion=%ProductBaseVersion%"
 - cmd: "set ProductVersion=%ProductBaseVersion%.%APPVEYOR_BUILD_NUMBER%"
 - cmd: "echo ProductVersion=%ProductVersion%"
-- cmd: "set ProductLongVersion=%ProductVersion%-%branch%"
+- cmd: "set ProductLongVersion=%ProductVersion%-%APPVEYOR_REPO_BRANCH%"
 - cmd: "echo ProductLongVersion=%ProductLongVersion%"
 - cmd: appveyor UpdateBuild -Version "%ProductVersion%"
 
