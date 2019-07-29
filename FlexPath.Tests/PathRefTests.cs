@@ -539,5 +539,48 @@ namespace FlexPath.Tests
                 Assert.That(pathRef.ToString(), Is.EqualTo(expectedOutput));
             }
         }
+
+        [TestFixture]
+        class Equals
+        {
+            [TestCase(@"", @"")]
+            [TestCase(@"A", @"A")]
+            [TestCase(@"C:/A", @"C:/A")]
+            [TestCase(@"A/B", @"A/B")]
+            [TestCase(@"A/../B", @"A/../B")]
+            [TestCase(@"A/../B", @"B")]
+            [TestCase(@"/A/../B", @"/B")]
+            [TestCase(null, null)]
+            public void When_ComparingToEqualPathRef(string inputA, string inputB)
+            {
+                PathRef pathRefA = new PathRef(inputA);
+                PathRef pathRefB = new PathRef(inputB);
+                Assert.That(pathRefA.Equals(pathRefB), Is.True);
+            }
+
+            [Test]
+            public void When_ComparingEmptyPathRefs()
+            {
+                PathRef pathRefA = new PathRef();
+                PathRef pathRefB = new PathRef();
+                Assert.That(pathRefA.Equals(pathRefB), Is.True);
+            }
+
+            [TestCase(@"", @"A")]
+            [TestCase(@"", null)]
+            [TestCase(null, @"A")]
+            [TestCase(@"A", "..")]
+            [TestCase(@"A/B", @"A/C")]
+            [TestCase(@"/A", "A")]
+            [TestCase(@"C:/A", "/A")]
+            [TestCase(@"D:/A", "C:/A")]
+            [TestCase(@"A/../B", @"/B")]
+            public void When_ComparingToInequalPathRef(string inputA, string inputB)
+            {
+                PathRef pathRefA = new PathRef(inputA);
+                PathRef pathRefB = new PathRef(inputB);
+                Assert.That(pathRefA.Equals(pathRefB), Is.False);
+            }
+        }
     }
 }

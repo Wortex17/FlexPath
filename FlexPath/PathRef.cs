@@ -15,7 +15,7 @@ namespace FlexPath
     /// without having to fall back to a absolute path.
     /// Joining this path reference with an absolute reference, makes this an absolute reference as well.
     /// </remarks>
-    public struct PathRef
+    public struct PathRef : IEquatable<PathRef>
     {
         public const string ParentDirectorySegment = "..";
         public const string CurrentDirectorySegment = ".";
@@ -262,6 +262,43 @@ namespace FlexPath
         public override string ToString()
         {
             return NormalizePath();
+        }
+
+        public bool Equals(PathRef other)
+        {
+            bool isEqual =
+                    object.Equals(m_IsNull, other.m_IsNull) &&
+                    object.Equals(m_IsAbsolute, other.m_IsAbsolute) &&
+                    object.Equals(m_Parents, other.m_Parents) &&
+                    object.Equals(m_RootSegment, other.m_RootSegment) &&
+                    object.Equals(HasAnyChildren, other.HasAnyChildren)
+                ;
+
+            if (m_Children == null)
+            {
+                isEqual &= other.m_Children == null;
+            }
+            else
+            {
+                isEqual &=
+                    other.m_Children != null &&
+                    object.Equals(m_Children.Count, other.m_Children.Count)
+                    ;
+                if (isEqual)
+                {
+                    //Check for equality of children items
+                    for (int i = 0; i < m_Children.Count; i++)
+                    {
+                        if (!object.Equals(m_Children[i], other.m_Children[i]))
+                        {
+                            isEqual = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            return isEqual;
         }
 
         //TODO:
