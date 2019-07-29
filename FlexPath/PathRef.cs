@@ -209,7 +209,7 @@ namespace FlexPath
         /// <summary>
         /// Path, as it should look like in a Unix file system
         /// </summary>
-        public string UnixPath => NormalizePath('/');
+        public string PosixPath => NormalizePath('/');
         /// <summary>
         /// Path as it should look like on the local file system
         /// </summary>

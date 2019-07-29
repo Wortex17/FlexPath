@@ -83,7 +83,7 @@ namespace FlexPath.Tests
             public void When_UsingWindowsPath(string input)
             {
                 PathRef pathRef = new PathRef(input);
-                Assert.That(pathRef.UnixPath, Is.EqualTo(pathRef.NormalizePath('/')));
+                Assert.That(pathRef.PosixPath, Is.EqualTo(pathRef.NormalizePath('/')));
             }
         }
 
