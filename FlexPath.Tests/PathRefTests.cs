@@ -614,5 +614,83 @@ namespace FlexPath.Tests
                 Assert.That(pathRefA.Equals(emptyPathRef), Is.False);
             }
         }
+
+        [TestFixture]
+        class Static_Combine
+        {
+            [TestCase(@"", @"")]
+            [TestCase(@"", null)]
+            [TestCase(null, null)]
+            [TestCase(@"", @"A")]
+            [TestCase(@"A", @"B")]
+            [TestCase(@"A", @"/B")]
+            [TestCase(@"A", @"/B")]
+            [TestCase(@"A", @"X:/B")]
+            [TestCase(@"A", @"../B")]
+            [TestCase(@"A", @"./B")]
+            [TestCase(@"A/B", @"C")]
+            [TestCase(@"A/B", @"../C")]
+            public void When_Combine2(string path1, string path2)
+            {
+                //Take note PathRef.Combine does never initialize the PathRef empty, so we should not expect it to either
+                var expectedPathRef = new PathRef(path1);
+                expectedPathRef.JoinWith(path2);
+                Assert.That(PathRef.Combine(path1, path2), Is.EqualTo(expectedPathRef));
+            }
+
+            [TestCase(@"", @"", @"")]
+            [TestCase(@"", null, @"")]
+            [TestCase(null, null, null)]
+            [TestCase(@"", @"A", @"B")]
+            [TestCase(@"A", @"B", @"C")]
+            [TestCase(@"A", @"/B", @"C")]
+            [TestCase(@"A", @"/B", @"/C")]
+            [TestCase(@"A", @"/B", @"X:/C")]
+            [TestCase(@"A", @"../B", @"C")]
+            [TestCase(@"A", @"./B", @"C")]
+            public void When_Combine3(string path1, string path2, string path3)
+            {
+                //Take note PathRef.Combine does never initialize the PathRef empty, so we should not expect it to either
+                var expectedPathRef = new PathRef(path1);
+                expectedPathRef.JoinWith(path2, path3);
+                Assert.That(PathRef.Combine(path1, path2, path3), Is.EqualTo(expectedPathRef));
+            }
+
+            [TestCase(@"", @"", @"", @"")]
+            [TestCase(@"", null, @"", @"")]
+            [TestCase(null, null, null, null)]
+            [TestCase(@"", @"A", @"B", @"C")]
+            [TestCase(@"A", @"B", @"C", @"D")]
+            [TestCase(@"A", @"/B", @"C", "D")]
+            [TestCase(@"A", @"/B", @"/C", @"/D")]
+            [TestCase(@"A", @"/B", @"X:/C", @"D")]
+            [TestCase(@"A", @"../B", @"C", "D")]
+            [TestCase(@"A", @"./B", @"C", @"D")]
+            public void When_Combine4(string path1, string path2, string path3, string path4)
+            {
+                //Take note PathRef.Combine does never initialize the PathRef empty, so we should not expect it to either
+                var expectedPathRef = new PathRef(path1);
+                expectedPathRef.JoinWith(path2, path3, path4);
+                Assert.That(PathRef.Combine(path1, path2, path3, path4), Is.EqualTo(expectedPathRef));
+            }
+
+            [TestCase(@"", @"", @"", @"", @"")]
+            [TestCase(@"", null, @"", @"", @"")]
+            [TestCase(null, null, null, null, null)]
+            [TestCase(@"", @"A", @"B", @"C", @"D")]
+            [TestCase(@"A", @"B", @"C", @"D", @"E")]
+            [TestCase(@"A", @"/B", @"C", "D", @"E")]
+            [TestCase(@"A", @"/B", @"/C", @"/D", @"/E")]
+            [TestCase(@"A", @"/B", @"X:/C", @"D", @"E")]
+            [TestCase(@"A", @"../B", @"C", "D", @"E")]
+            [TestCase(@"A", @"./B", @"C", @"D", @"E")]
+            public void When_Combine5(string path1, string path2, string path3, string path4, string path5)
+            {
+                //Take note PathRef.Combine does never initialize the PathRef empty, so we should not expect it to either
+                var expectedPathRef = new PathRef(path1);
+                expectedPathRef.JoinWith(path2, path3, path4, path5);
+                Assert.That(PathRef.Combine(path1, path2, path3, path4, path5), Is.EqualTo(expectedPathRef));
+            }
+        }
     }
 }

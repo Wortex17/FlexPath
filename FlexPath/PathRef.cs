@@ -20,6 +20,46 @@ namespace FlexPath
         public const string ParentDirectorySegment = "..";
         public const string CurrentDirectorySegment = ".";
 
+        /// <summary>
+        /// Similar to <see cref="Path.Combine(string,string)"/>, combines strings assuming them to be path references.
+        /// </summary>
+        public static PathRef Combine(string path1, string path2)
+        {
+            var pathRef = new PathRef(path1);
+            pathRef.JoinWith(path2);
+            return pathRef;
+        }
+
+        /// <summary>
+        /// Similar to <see cref="Path.Combine(string,string,string)"/>, combines strings assuming them to be path references.
+        /// </summary>
+        public static PathRef Combine(string path1, string path2, string path3)
+        {
+            var pathRef = Combine(path1, path2);
+            pathRef.JoinWith(path3);
+            return pathRef;
+        }
+
+        /// <summary>
+        /// Similar to <see cref="Path.Combine(string,string,string,string)"/>, combines strings assuming them to be path references.
+        /// </summary>
+        public static PathRef Combine(string path1, string path2, string path3, string path4)
+        {
+            var pathRef = Combine(path1, path2, path3);
+            pathRef.JoinWith(path4);
+            return pathRef;
+        }
+
+        /// <summary>
+        /// Similar to <see cref="Path.Combine(string[])"/>, combines strings assuming them to be path references.
+        /// </summary>
+        public static PathRef Combine(params string[] paths)
+        {
+            var pathRef = new PathRef(null);
+            pathRef.JoinWith(paths);
+            return pathRef;
+        }
+
         public bool IsNull => m_IsNull;
 
         public bool IsEmpty => !IsNull && !IsAbsolute && !HasAnyChildren && !HasAnyParents;
@@ -272,29 +312,19 @@ namespace FlexPath
                     object.Equals(m_IsAbsolute, other.m_IsAbsolute) &&
                     object.Equals(m_Parents, other.m_Parents) &&
                     object.Equals(m_RootSegment, other.m_RootSegment) &&
-                    object.Equals(HasAnyChildren, other.HasAnyChildren)
+                    object.Equals(m_Children != null, other.m_Children != null) &&
+                    object.Equals(ChildCount, other.ChildCount)
                 ;
 
-            if (m_Children == null)
+            if (isEqual && ChildCount > 0)
             {
-                isEqual &= other.m_Children == null;
-            }
-            else
-            {
-                isEqual &=
-                    other.m_Children != null &&
-                    object.Equals(m_Children.Count, other.m_Children.Count)
-                    ;
-                if (isEqual)
+                //Check for equality of children items
+                for (int i = 0; i < m_Children.Count; i++)
                 {
-                    //Check for equality of children items
-                    for (int i = 0; i < m_Children.Count; i++)
+                    if (!object.Equals(m_Children[i], other.m_Children[i]))
                     {
-                        if (!object.Equals(m_Children[i], other.m_Children[i]))
-                        {
-                            isEqual = false;
-                            break;
-                        }
+                        isEqual = false;
+                        break;
                     }
                 }
             }
@@ -312,13 +342,11 @@ namespace FlexPath
                 m_Children = new List<string>();
         }
 
-        //TODO:
-        //public static string Combine //Similar to Path.Combine
-
         public static implicit operator string(PathRef pathRef) => pathRef.ToString();
         public static implicit operator PathRef(string path) => new PathRef(path);
 
-        private bool HasAnyChildren => m_Children?.Count > 0;
+        private int ChildCount => m_Children?.Count ?? 0;
+        private bool HasAnyChildren => ChildCount > 0;
         private bool HasAnyParents => m_Parents > 0;
 
         private bool m_IsNull;
