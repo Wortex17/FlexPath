@@ -144,7 +144,7 @@ namespace FlexPath
         public void PointToParent()
         {
             m_IsNull = false;
-            if (m_Children.Count > 0)
+            if (m_Children?.Count > 0)
             {
                 m_Children.RemoveAt(m_Children.Count-1);
             }
@@ -199,6 +199,7 @@ namespace FlexPath
         private void PointToChildUnsafe(string childName)
         {
             m_IsNull = false;
+            EnsureChildren();
             m_Children.Add(childName);
         }
 
@@ -248,7 +249,7 @@ namespace FlexPath
                 isInitialSegment = false;
                 SharedStringBuilder.Append(ParentDirectorySegment);
             }
-            for (int i = 0; i < m_Children.Count; i++)
+            for (int i = 0; i < m_Children?.Count; i++)
             {
                 if (!isInitialSegment)
                     SharedStringBuilder.Append(directorySeparator);
@@ -301,13 +302,23 @@ namespace FlexPath
             return isEqual;
         }
 
+        /// <summary>
+        /// In case array of children has not been initialized yet, initializes it.
+        /// This is needed to e.g. initialize <see cref="PathRef"/> that was constructed empty.
+        /// </summary>
+        void EnsureChildren()
+        {
+            if(m_Children == null)
+                m_Children = new List<string>();
+        }
+
         //TODO:
-        //public static string Combine //Simialr to Path.Combine
+        //public static string Combine //Similar to Path.Combine
 
         public static implicit operator string(PathRef pathRef) => pathRef.ToString();
         public static implicit operator PathRef(string path) => new PathRef(path);
 
-        private bool HasAnyChildren => (m_Children != null && m_Children.Count > 0);
+        private bool HasAnyChildren => m_Children?.Count > 0;
         private bool HasAnyParents => m_Parents > 0;
 
         private bool m_IsNull;

@@ -346,6 +346,14 @@ namespace FlexPath.Tests
                 Assert.That(pathRef.ToString(), Is.EqualTo(expectedOutput));
             }
 
+            [TestCase(new[] { "B" }, @"B")]
+            public void When_EmptyJoiningWithRelativePath(string[] toJoin, string expectedOutput)
+            {
+                PathRef pathRef = new PathRef();
+                Assert.That(() => { pathRef.JoinWith(toJoin); }, Throws.Nothing);
+                Assert.That(pathRef.ToString(), Is.EqualTo(expectedOutput));
+            }
+
             [TestCase(@"A")]
             [TestCase(@"A/B")]
             [TestCase(@"A/..")]
@@ -358,6 +366,14 @@ namespace FlexPath.Tests
                 string expectedOutput = pathRef.ToString();
                 Assert.That(() => { pathRef.JoinWith(null); }, Throws.Nothing);
                 Assert.That(pathRef.ToString(), Is.EqualTo(expectedOutput));
+            }
+            
+            [Test]
+            public void When_EmptyJoiningWithNull()
+            {
+                PathRef pathRef = new PathRef();
+                Assert.That(() => { pathRef.JoinWith(null); }, Throws.Nothing);
+                Assert.That(pathRef.ToString(), Is.EqualTo(""));
             }
 
             [TestCase(@"A")]
@@ -541,7 +557,7 @@ namespace FlexPath.Tests
         }
 
         [TestFixture]
-        class Equals
+        class EqualityEquals
         {
             [TestCase(@"", @"")]
             [TestCase(@"A", @"A")]
@@ -580,6 +596,22 @@ namespace FlexPath.Tests
                 PathRef pathRefA = new PathRef(inputA);
                 PathRef pathRefB = new PathRef(inputB);
                 Assert.That(pathRefA.Equals(pathRefB), Is.False);
+            }
+
+            [TestCase(@"")]
+            [TestCase(@"./")]
+            [TestCase(@"../")]
+            [TestCase(null)]
+            [TestCase(@"A")]
+            [TestCase(@"A/B")]
+            [TestCase(@"/A")]
+            [TestCase(@"C:/A")]
+            [TestCase(@"A/../B")]
+            public void When_ComparingToEmptyPathRef(string inputA)
+            {
+                PathRef pathRefA = new PathRef(inputA);
+                PathRef emptyPathRef = new PathRef();
+                Assert.That(pathRefA.Equals(emptyPathRef), Is.False);
             }
         }
     }
