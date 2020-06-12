@@ -11,10 +11,16 @@ FlexPath allows you to build paths for various platforms, agnostic to the runtim
 What sets it apart from .NET tools like ```Path.Combine``` is that FlexPath tokenizes each path before reconstructing it when a combined or collapsed path is required.
 This allows FlexPath to retain relative path symbols like ```..``` or ```.``` and enables you to build and collapse actual *relative* paths **without resorting to** filesystem operations like ```Path.GetFullPath```.
 In the same manner, FlexPath also helps out with toublesome uncontrolled path input from e.g. command line arguments.
+#### Parsing Comparison
 * ```Path.Combine("DirA", "DirB/DirC")```
 results in ```DirA\DirB/DirC```
 (on windows) because of the sneaky separator in the second argument.  
 * ```FlexPath.PathRef.Combine("DirA", "DirB/DirC").WindowsPath``` always results in ```DirA\DirB\DirC``` instead.  
+#### Collapsing Comparison
+* ```Path.Combine("DirA", "..", "DirC")```
+results in ```DirA\..\DirC```
+(on windows) and would require ```Path.GetFullPath()``` which has actual file system communication overhead and always results in an absolute path.  
+* ```FlexPath.PathRef.Combine("DirA", "..", "DirC").WindowsPath``` results in the, still possibly relative, ```DirC``` instead.  
 
 ## PathRef
 
