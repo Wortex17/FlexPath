@@ -65,6 +65,11 @@ namespace FlexPath
         public bool IsEmpty => !IsNull && !IsAbsolute && !HasAnyChildren && !HasAnyParents;
 
         /// <summary>
+        /// A Path is a pure directory path if it contains a trailing directory separator
+        /// </summary>
+        public bool IsPureDirectory => m_IsDirectory;
+
+        /// <summary>
         /// A Path is absolute if it either it <see cref="IsRooted"/> or if it was built/joined with an absolute reference and therefore should contain
         /// a prefix to make it absolute too.
         /// </summary>
@@ -89,6 +94,7 @@ namespace FlexPath
             m_IsNull = anchorPath == null;
             m_IsAbsolute = false;
             m_RootSegment = null;
+            m_IsDirectory = false;
             JoinWith(anchorPath);
         }
 
@@ -132,6 +138,8 @@ namespace FlexPath
 
         void JoinWithSegment(string segment, bool isStartSegment, bool isEndSegment)
         {
+            //New segment indicates previous trailing directory separator is not trailing
+            m_IsDirectory = false;
             if (String.IsNullOrEmpty(segment))
             {
                 if (isStartSegment && !isEndSegment)
@@ -142,10 +150,10 @@ namespace FlexPath
                     m_IsAbsolute = true;
                     return;
                 }
-                else if(isEndSegment)
+                else if(isEndSegment && !isStartSegment)
                 {
                     //Empty end segment is cut off
-                    //TODO: Maybe store trailing end segment, so we can restore the trialing separator when exporting the string
+                    m_IsDirectory = true;
                     return;
                 }
                 else
@@ -238,6 +246,7 @@ namespace FlexPath
 
         private void PointToChildUnsafe(string childName)
         {
+            m_IsDirectory = false;
             m_IsNull = false;
             EnsureChildren();
             m_Children.Add(childName);
@@ -282,20 +291,30 @@ namespace FlexPath
                 SharedStringBuilder.Append(directorySeparator);
             }
 
+            int addedSegments = 0;
             for (int i = 0; i < m_Parents; i++)
             {
                 if (!isInitialSegment)
                     SharedStringBuilder.Append(directorySeparator);
                 isInitialSegment = false;
                 SharedStringBuilder.Append(ParentDirectorySegment);
+                addedSegments++;
             }
+
             for (int i = 0; i < m_Children?.Count; i++)
             {
                 if (!isInitialSegment)
                     SharedStringBuilder.Append(directorySeparator);
                 isInitialSegment = false;
                 SharedStringBuilder.Append(m_Children[i]);
+                addedSegments++;
             }
+
+            if (addedSegments > 0 && IsPureDirectory)
+            {
+                SharedStringBuilder.Append(directorySeparator);
+            }
+
             m_NormalizedPath = SharedStringBuilder.ToString();
             return m_NormalizedPath;
         }
@@ -369,6 +388,10 @@ namespace FlexPath
         /// The name sof the children that have to be visited
         /// </summary>
         private List<string> m_Children;
+        /// <summary>
+        /// True if this path contains a trailing directory separator.
+        /// </summary>
+        private bool m_IsDirectory;
 
         private static readonly StringBuilder SharedStringBuilder = new StringBuilder();
     }

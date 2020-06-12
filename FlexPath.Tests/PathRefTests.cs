@@ -294,6 +294,17 @@ namespace FlexPath.Tests
                 Assert.That(pathRef.IsRelative, Is.False);
                 Assert.That(pathRef.IsRooted, Is.True);
             }
+
+
+            [TestCase(@"A/")]
+            [TestCase(@"A/B/")]
+            [TestCase(@"A/../")]
+            [TestCase(@"./")]
+            public void When_PureDirectoryPathIsGiven(string str)
+            {
+                PathRef pathRef = new PathRef(str);
+                Assert.That(pathRef.IsPureDirectory, Is.True);
+            }
         }
 
         [TestCase(@"",@"")]
@@ -301,7 +312,7 @@ namespace FlexPath.Tests
         [TestCase(@".", @"")]
         [TestCase(@"./", @"")]
         [TestCase(@"..", @"..")]
-        [TestCase(@"../", @"..")]
+        [TestCase(@"../", @"..\")]
         [TestCase(@"A", @"A")]
         [TestCase(@"A/B", @"A\B")]
         [TestCase(@"A/B/C/..", @"A\B")]
@@ -321,6 +332,9 @@ namespace FlexPath.Tests
         [TestCase(@"/..", @"\")]
         [TestCase(@"/../..", @"\")]
         [TestCase(@"/A/../..", @"\")]
+        [TestCase(@"A/", @"A\")]
+        [TestCase(@"A//", @"A\")]
+        [TestCase(@"A/../B/", @"B\")]
         public void When_CreatingWithValidInput(string input, string expectedOutput)
         {
             PathRef pathRef = new PathRef(input);
@@ -573,9 +587,9 @@ namespace FlexPath.Tests
             [TestCase(@"", @"..")]
             [TestCase(null, @"..")]
             [TestCase(@".", @"..")]
-            [TestCase(@"./", @"..")]
+            [TestCase(@"./", @"..\")]
             [TestCase(@"..", @"..\..")]
-            [TestCase(@"../", @"..\..")]
+            [TestCase(@"../", @"..\..\")]
             [TestCase(@"A", @"")]
             [TestCase(@"A/B", @"A")]
             [TestCase(@"A/B/C", @"A\B")]
