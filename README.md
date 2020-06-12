@@ -9,7 +9,7 @@ A flexible C# file/resource path building utility. Never worry about about build
 
 FlexPath allows you to build paths for various platforms, agnostic to the runtime platform it is being executed on.
 What sets it apart from .NET tools like ```Path.Combine``` is that FlexPath tokenizes each path before reconstructing it when a combined or collapsed path is required.
-This allows FlexPath to retain relative path symbols like ```..``` or ```.``` and enables you to build actual relative paths
+This allows FlexPath to retain relative path symbols like ```..``` or ```.``` and enables you to build and collapse actual *relative* paths **without resorting to** filesystem operations like ```Path.GetFullPath```.
 In the same manner, FlexPath also helps out with toublesome uncontrolled path input from e.g. command line arguments.
 * ```Path.Combine("DirA", "DirB/DirC")```
 results in ```DirA\DirB/DirC```
