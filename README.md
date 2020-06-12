@@ -5,7 +5,7 @@ A flexible C# file/resource path building utility. Never worry about about build
 [![Build status](https://ci.appveyor.com/api/projects/status/f5tq5q3u4j87a0ux/branch/master?svg=true)](https://ci.appveyor.com/project/Wortex17/flexpath/branch/master)
 [![codecov](https://codecov.io/gh/Wortex17/FlexPath/branch/master/graph/badge.svg)](https://codecov.io/gh/Wortex17/FlexPath)  
 [![License](https://img.shields.io/github/license/Wortex17/FlexPath)](https://raw.githubusercontent.com/Wortex17/FlexPath/master/LICENSE)
-[![Nuget](https://img.shields.io/nuget/v/Infrablack.FlexPath)](https://www.nuget.org/packages/Infrablack.FlexPath/0.1.0.36)
+[![Nuget](https://img.shields.io/nuget/v/Infrablack.FlexPath)](https://www.nuget.org/packages/Infrablack.FlexPath/)
 
 FlexPath allows you to build paths for various platforms, agnostic to the runtime platform it is being executed on.
 What sets it apart from .NET tools like ```Path.Combine``` is that FlexPath tokenizes each path before reconstructing it when a combined or collapsed path is required.
