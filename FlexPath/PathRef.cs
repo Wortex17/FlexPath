@@ -265,12 +265,29 @@ namespace FlexPath
         /// </summary>
         public string LocalPath => NormalizePath();
 
+        /// <summary>
+        /// Normalizes the path using the systems <see cref="Path.DirectorySeparatorChar"/>.
+        /// Appends a trailing directory separator if this path is <see cref="IsPureDirectory"/>
+        /// </summary>
         public string NormalizePath()
         {
             return NormalizePath(Path.DirectorySeparatorChar);
         }
 
+        /// <summary>
+        /// Normalizes the path using the custom provided <see cref="directorySeparator"/>
+        /// Appends a trailing directory separator if this path is <see cref="IsPureDirectory"/>
+        /// </summary>
         public string NormalizePath(char directorySeparator)
+        {
+            return NormalizePath(directorySeparator, IsPureDirectory);
+        }
+
+        /// <summary>
+        /// Normalizes the path using the custom provided <see cref="directorySeparator"/>
+        /// Overrides the appending of a trailing directory separator. Note that it will not be appended to root-only paths.
+        /// </summary>
+        public string NormalizePath(char directorySeparator, bool appendTrailingSeparator)
         {
             if (IsNull)
                 return null;
@@ -310,7 +327,7 @@ namespace FlexPath
                 addedSegments++;
             }
 
-            if (addedSegments > 0 && IsPureDirectory)
+            if (appendTrailingSeparator && addedSegments > 0)
             {
                 SharedStringBuilder.Append(directorySeparator);
             }
