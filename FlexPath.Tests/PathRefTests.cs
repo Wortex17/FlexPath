@@ -7,6 +7,86 @@ namespace FlexPath.Tests
     class PathRefTests
     {
         [TestFixture]
+        class ReadmeExamples
+        {
+            [Test]
+            public void CombineWithSneakySeparator()
+            {
+                Assert.That(PathRef.Combine("DirA", "DirB/DirC").WindowsPath, Is.EqualTo(@"DirA\DirB\DirC"));
+            }
+
+            [Test]
+            public void Normalizing()
+            {
+                PathRef pathRef = new PathRef("../DirA/DirB");
+                Assert.That(pathRef.WindowsPath, Is.EqualTo(@"..\DirA\DirB"));
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"../DirA/DirB"));
+            }
+
+            [Test]
+            public void NormalizingRooted()
+            {
+                PathRef pathRef = new PathRef(@"C:\DirA\DirB");
+                Assert.That(pathRef.WindowsPath, Is.EqualTo(@"C:\DirA\DirB"));
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"C:/DirA/DirB"));
+            }
+
+            [Test]
+            public void Navigation()
+            {
+                PathRef pathRef = new PathRef("DirA/DirB");
+                pathRef.PointToParent();
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"DirA"));
+                pathRef.PointToChild("DirC");
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"DirA/DirC"));
+            }
+
+            [Test]
+            public void NavigationJoin()
+            {
+                PathRef pathRef = new PathRef("DirA/DirB");
+                pathRef.JoinWith("DirE/../DirF"); //Relative paths are also allowed
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"DirA/DirB/DirF"));
+            }
+
+            [Test]
+            public void RelativePaths()
+            {
+                PathRef pathRef = new PathRef("../DirB");
+                Assert.That(pathRef.IsRelative, Is.True);
+                Assert.That(pathRef.IsAbsolute, Is.False);
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"../DirB"));
+            }
+
+            [Test]
+            public void AbsoluteToRelativePaths()
+            {
+                PathRef pathRef = new PathRef("DirA/DirB");
+                pathRef.JoinWith("../../../DirC");
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"../DirC"));
+            }
+
+            [Test]
+            public void Clearing()
+            {
+                PathRef pathRef = new PathRef("DirA/DirB");
+                pathRef.Clear();
+                Assert.That(pathRef.PosixPath, Is.EqualTo(""));
+            }
+
+            [Test]
+            public void Rooting()
+            {
+                PathRef pathRef = new PathRef("C:/DirA");
+                Assert.That(pathRef.IsRooted, Is.True);
+                pathRef.JoinWith("../../../..");
+                Assert.That(pathRef.PosixPath, Is.EqualTo(@"C:"));
+                pathRef.Clear();
+                Assert.That(pathRef.IsRooted, Is.False);
+            }
+        }
+
+        [TestFixture]
         class LocalPath
         {
             [TestCase(null)]
