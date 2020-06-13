@@ -368,6 +368,7 @@ namespace FlexPath
                     object.Equals(m_IsAbsolute, other.m_IsAbsolute) &&
                     object.Equals(m_Parents, other.m_Parents) &&
                     object.Equals(m_RootSegment, other.m_RootSegment) &&
+                    object.Equals(m_IsDirectory, other.m_IsDirectory) &&
                     object.Equals(m_Children != null, other.m_Children != null) &&
                     object.Equals(ChildCount, other.ChildCount)
                 ;

@@ -655,6 +655,7 @@ namespace FlexPath.Tests
         {
             [TestCase(@"", @"")]
             [TestCase(@"A", @"A")]
+            [TestCase(@"A/", "A/")]
             [TestCase(@"C:/A", @"C:/A")]
             [TestCase(@"A/B", @"A/B")]
             [TestCase(@"A/../B", @"A/../B")]
@@ -682,6 +683,7 @@ namespace FlexPath.Tests
             [TestCase(@"A", "..")]
             [TestCase(@"A/B", @"A/C")]
             [TestCase(@"/A", "A")]
+            [TestCase(@"A/", "A")]
             [TestCase(@"C:/A", "/A")]
             [TestCase(@"D:/A", "C:/A")]
             [TestCase(@"A/../B", @"/B")]
