@@ -17,8 +17,14 @@ namespace FlexPath
     /// </remarks>
     public struct PathRef : IEquatable<PathRef>
     {
-        public const string ParentDirectorySegment = "..";
-        public const string CurrentDirectorySegment = ".";
+        /// <summary>
+        /// Segment denoting a navigation to the parent directory
+        /// </summary>
+        const string ParentDirectorySegment = "..";
+        /// <summary>
+        /// Segment denoting a path relative to the current workspace (or another reference path)
+        /// </summary>
+        const string CurrentDirectorySegment = ".";
 
         /// <summary>
         /// Similar to <see cref="Path.Combine(string,string)"/>, combines strings assuming them to be path references.
@@ -106,7 +112,10 @@ namespace FlexPath
         public void JoinWith(params string[] paths)
         {
             if (paths == null)
+            {
                 return;
+            }
+
             foreach (var path in paths)
             {
                 JoinWith(path);
@@ -121,10 +130,12 @@ namespace FlexPath
         void JoinWith(string path)
         {
             if (path == null)
+            {
                 return;
+            }
 
             m_IsNull = false;
-            var newSegments = path.Split(new char[]
+            var newSegments = path.Split(new[]
             {
                 Path.DirectorySeparatorChar,
                 Path.AltDirectorySeparatorChar
@@ -225,7 +236,7 @@ namespace FlexPath
                 throw new ArgumentException($"PointToChild childName '{childName}' contains invalid character '\\' at index {errorIndex}");
             }
 
-            if (childName.Trim(new char[] {'.'}).Length == 0)
+            if (childName.Trim(new[] {'.'}).Length == 0)
             {
                 throw new ArgumentException($"PointToChild childName '{childName}' contains only dots which is invalid");
             }
@@ -290,10 +301,14 @@ namespace FlexPath
         public string NormalizePath(char directorySeparator, bool appendTrailingSeparator)
         {
             if (IsNull)
+            {
                 return null;
+            }
 
             if (IsEmpty)
-                return String.Empty;
+            {
+                return string.Empty;
+            }
 
             SharedStringBuilder.Clear();
 
@@ -312,7 +327,10 @@ namespace FlexPath
             for (int i = 0; i < m_Parents; i++)
             {
                 if (!isInitialSegment)
+                {
                     SharedStringBuilder.Append(directorySeparator);
+                }
+
                 isInitialSegment = false;
                 SharedStringBuilder.Append(ParentDirectorySegment);
                 addedSegments++;
@@ -321,7 +339,10 @@ namespace FlexPath
             for (int i = 0; i < m_Children?.Count; i++)
             {
                 if (!isInitialSegment)
+                {
                     SharedStringBuilder.Append(directorySeparator);
+                }
+
                 isInitialSegment = false;
                 SharedStringBuilder.Append(m_Children[i]);
                 addedSegments++;
@@ -374,8 +395,10 @@ namespace FlexPath
         /// </summary>
         void EnsureChildren()
         {
-            if(m_Children == null)
+            if (m_Children == null)
+            {
                 m_Children = new List<string>();
+            }
         }
 
         public static implicit operator string(PathRef pathRef) => pathRef.ToString();
