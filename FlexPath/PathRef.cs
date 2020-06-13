@@ -94,7 +94,6 @@ namespace FlexPath
         /// </summary>
         public PathRef(string anchorPath)
         {
-            m_NormalizedPath = null;
             m_Children = new List<string>();
             m_Parents = 0;
             m_IsNull = anchorPath == null;
@@ -353,8 +352,8 @@ namespace FlexPath
                 SharedStringBuilder.Append(directorySeparator);
             }
 
-            m_NormalizedPath = SharedStringBuilder.ToString();
-            return m_NormalizedPath;
+            string normalizedPath = SharedStringBuilder.ToString();
+            return normalizedPath;
         }
 
         public override string ToString()
@@ -418,7 +417,6 @@ namespace FlexPath
         /// The segment to prefix if defined. Marks this path as rooted.
         /// </summary>
         private string m_RootSegment;
-        private string m_NormalizedPath;
 
         /// <summary>
         /// The number of parents that have to be visited before visiting the children.
