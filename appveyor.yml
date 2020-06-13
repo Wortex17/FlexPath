@@ -24,6 +24,8 @@ before_build:
 
 test_script:
 - OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:".\FlexPath.Tests\bin\Debug\FlexPath.Tests.dll .\FlexPath.Tests\bin\Release\FlexPath.Tests.dll --result=myresults.xml;format=AppVeyor" -filter:"+[FlexPath*]* -[FlexPath.Tests*]*" -output:".\FlexPath_coverage.xml"
+
+after_test:
 - codecov -f "FlexPath_coverage.xml"
 
 build:
