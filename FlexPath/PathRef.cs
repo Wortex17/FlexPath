@@ -251,6 +251,7 @@ namespace FlexPath
             m_IsAbsolute = IsAbsolute;
             m_RootSegment = null;
             m_Children?.Clear();
+            m_IsDirectory = false;
             m_Parents = 0;
         }
 
@@ -295,7 +296,9 @@ namespace FlexPath
 
         /// <summary>
         /// Normalizes the path using the custom provided <see cref="directorySeparator"/>
-        /// Overrides the appending of a trailing directory separator. Note that it will not be appended to root-only paths.
+        /// Overrides the appending of a trailing directory separator.
+        /// Note that it will not be appended to root-only paths.
+        /// Note that appending a trailing separator may add a <see cref="CurrentDirectorySegment"/> if the path is empty
         /// </summary>
         public string NormalizePath(char directorySeparator, bool appendTrailingSeparator)
         {
@@ -306,6 +309,10 @@ namespace FlexPath
 
             if (IsEmpty)
             {
+                if (appendTrailingSeparator)
+                {
+                    return CurrentDirectorySegment + directorySeparator;
+                }
                 return string.Empty;
             }
 
