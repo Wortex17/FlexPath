@@ -347,7 +347,7 @@ namespace FlexPath
                 addedSegments++;
             }
 
-            if (appendTrailingSeparator && addedSegments > 0)
+            if (appendTrailingSeparator && (addedSegments > 0 || IsRooted))
             {
                 SharedStringBuilder.Append(directorySeparator);
             }

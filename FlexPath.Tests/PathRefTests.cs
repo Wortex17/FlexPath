@@ -87,6 +87,42 @@ namespace FlexPath.Tests
         }
 
         [TestFixture]
+        class NormalizePath
+        {
+            [TestCase(null, '/', null)]
+            [TestCase("", '/', "")]
+            [TestCase(".", '/', ".")]
+            [TestCase("..", '/', "..")]
+            [TestCase("A", '/', "A")]
+            [TestCase("A/B", '/', "A/B")]
+            [TestCase("A/B/C", '/', "A/B/C")]
+            [TestCase("A/..", '/', ".")]
+            [TestCase("A/../C", '/', "A/C")]
+            [TestCase("A/../..", '/', "..")]
+            [TestCase("C:", '/', "C:")]
+            [TestCase("C:/A", '/', "C:/A")]
+            [TestCase("C:/A/..", '/', "C:")]
+            [TestCase("/", '/', "/")]
+            [TestCase("./", '/', "./")]
+            [TestCase("../", '/', "../")]
+            [TestCase("A/", '/', "A/")]
+            [TestCase("A/B/", '/', "A/B/")]
+            [TestCase("A/B/C/", '/', "A/B/C/")]
+            [TestCase("A/../", '/', "./")]
+            [TestCase("A/../C/", '/', "A/C/")]
+            [TestCase("A/../../", '/', "../")]
+            [TestCase("C:/", '/', "C:/")]
+            [TestCase("C:/A/", '/', "C:/A/")]
+            [TestCase("C:/A/../", '/', "C:/")]
+            public void When_SimplePath(string input, char directorySeparator, string expected)
+            {
+                PathRef pathRef = new PathRef(input);
+                string normalized = pathRef.NormalizePath(directorySeparator);
+                Assert.That(normalized, Is.EqualTo(expected));
+            }
+        }
+
+        [TestFixture]
         class LocalPath
         {
             [TestCase(null)]
@@ -138,6 +174,21 @@ namespace FlexPath.Tests
             {
                 PathRef pathRef = new PathRef(input);
                 Assert.That(pathRef.WindowsPath, Is.EqualTo(pathRef.NormalizePath('\\')));
+            }
+
+            [TestCase(@"C:\", @"C:\")]
+            [TestCase(@"C:\\", @"C:\")]
+            [TestCase(@"C:\A", @"C:\A")]
+            [TestCase(@"C:\\A", @"C:\A")]
+            [TestCase(@"A\B\C\", @"A\B\C\")]
+            [TestCase(@"A\B\C", @"A\B\C")]
+            [TestCase(@"A\B\C\..", @"A\B")]
+            [TestCase(@"\A\B\C\..", @"\A\B")]
+            [TestCase(@"\\A\B\C\..", @"\A\B")]
+            public void When_Normalizing_FromWindowsBackslashPath(string input, string expectedWindowsPath)
+            {
+                PathRef pathRef = new PathRef(input);
+                Assert.That(pathRef.WindowsPath, Is.EqualTo(expectedWindowsPath));
             }
         }
 
@@ -298,6 +349,7 @@ namespace FlexPath.Tests
             }
 
 
+            [TestCase(@"C:/")]
             [TestCase(@"A/")]
             [TestCase(@"A/B/")]
             [TestCase(@"A/../")]
