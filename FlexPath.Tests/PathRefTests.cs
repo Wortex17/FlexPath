@@ -112,7 +112,7 @@ namespace FlexPath.Tests
                 Assert.That(pathRef.LocalPath, Is.EqualTo(pathRef.NormalizePath(Path.DirectorySeparatorChar)));
             }
         }
-
+        
         [TestFixture]
         class WindowsPath
         {
@@ -125,6 +125,7 @@ namespace FlexPath.Tests
             [TestCase(@"../")]
             [TestCase(@"A")]
             [TestCase(@"A/B")]
+            [TestCase(@"A/B/")]
             [TestCase(@"A/B/C/..")]
             [TestCase(@"A/B/C/../..")]
             [TestCase(@"A/B/C/../../..")]
@@ -133,7 +134,7 @@ namespace FlexPath.Tests
             [TestCase(@"A/B/C/../../../../D")]
             [TestCase(@"A/B/C/../../../../D/..")]
             [TestCase(@"A/B/C/../../../../..")]
-            public void When_UsingWindowsPath(string input)
+            public void When_NormalizingAsWindowsPath(string input)
             {
                 PathRef pathRef = new PathRef(input);
                 Assert.That(pathRef.WindowsPath, Is.EqualTo(pathRef.NormalizePath('\\')));
@@ -152,6 +153,7 @@ namespace FlexPath.Tests
             [TestCase(@"../")]
             [TestCase(@"A")]
             [TestCase(@"A/B")]
+            [TestCase(@"A/B/")]
             [TestCase(@"A/B/C/..")]
             [TestCase(@"A/B/C/../..")]
             [TestCase(@"A/B/C/../../..")]
@@ -160,7 +162,7 @@ namespace FlexPath.Tests
             [TestCase(@"A/B/C/../../../../D")]
             [TestCase(@"A/B/C/../../../../D/..")]
             [TestCase(@"A/B/C/../../../../..")]
-            public void When_UsingWindowsPath(string input)
+            public void When_NormalizingAsUnixPath(string input)
             {
                 PathRef pathRef = new PathRef(input);
                 Assert.That(pathRef.PosixPath, Is.EqualTo(pathRef.NormalizePath('/')));
