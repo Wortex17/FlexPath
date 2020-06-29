@@ -119,6 +119,7 @@ namespace FlexPath.Tests
 
 
             [TestCase(".", '/', "")] // Will become empty once resolved
+            [TestCase("A/./", '/', "A/")]
             [TestCase("./", '/', "./")]
             public void When_CurrentDirectory(string input, char directorySeparator, string expected)
             {
@@ -128,8 +129,18 @@ namespace FlexPath.Tests
             }
 
             [TestCase("..", '/', "..")]
+            [TestCase("A/../", '/', "./")]
             [TestCase("../", '/', "../")]
             public void When_ParentDirectory(string input, char directorySeparator, string expected)
+            {
+                PathRef pathRef = new PathRef(input);
+                string normalized = pathRef.NormalizePath(directorySeparator);
+                Assert.That(normalized, Is.EqualTo(expected));
+            }
+
+            [TestCase("A/../../", '/', "../")]
+            [TestCase("A/../../C/", '/', "../C/")]
+            public void WhenBreakoutRelativePath(string input, char directorySeparator, string expected)
             {
                 PathRef pathRef = new PathRef(input);
                 string normalized = pathRef.NormalizePath(directorySeparator);
