@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="PathRef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SegmentedPathUnsafe.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

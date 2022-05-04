@@ -94,7 +94,7 @@ namespace FlexPath
         /// </summary>
         public PathRef(string anchorPath)
         {
-            m_Children = new List<string>();
+            m_Children = new SegmentedPathUnsafe();
             m_Parents = 0;
             m_IsNull = anchorPath == null;
             m_IsAbsolute = false;
@@ -202,9 +202,9 @@ namespace FlexPath
         public void PointToParent()
         {
             m_IsNull = false;
-            if (m_Children?.Count > 0)
+            if (ChildCount > 0)
             {
-                m_Children.RemoveAt(m_Children.Count-1);
+                m_Children.Pop();
             }
             else if (IsAbsolute)
             {
@@ -250,7 +250,7 @@ namespace FlexPath
         {
             m_IsAbsolute = IsAbsolute;
             m_RootSegment = null;
-            m_Children?.Clear();
+            m_Children.Clear();
             m_IsDirectory = false;
             m_Parents = 0;
         }
@@ -259,8 +259,7 @@ namespace FlexPath
         {
             m_IsDirectory = false;
             m_IsNull = false;
-            EnsureChildren();
-            m_Children.Add(childName);
+            m_Children.Push(childName);
         }
 
         /// <summary>
@@ -342,7 +341,7 @@ namespace FlexPath
                 addedSegments++;
             }
 
-            for (int i = 0; i < m_Children?.Count; i++)
+            m_Children.IterateSegments((string segment) =>
             {
                 if (!isInitialSegment)
                 {
@@ -350,9 +349,9 @@ namespace FlexPath
                 }
 
                 isInitialSegment = false;
-                SharedStringBuilder.Append(m_Children[i]);
+                SharedStringBuilder.Append(segment);
                 addedSegments++;
-            }
+            });
 
             if (appendTrailingSeparator && (addedSegments > 0 || IsRooted))
             {
@@ -376,42 +375,15 @@ namespace FlexPath
                     object.Equals(m_Parents, other.m_Parents) &&
                     object.Equals(m_RootSegment, other.m_RootSegment) &&
                     object.Equals(m_IsDirectory, other.m_IsDirectory) &&
-                    object.Equals(m_Children != null, other.m_Children != null) &&
-                    object.Equals(ChildCount, other.ChildCount)
+                    object.Equals(m_Children, other.m_Children)
                 ;
-
-            if (isEqual && ChildCount > 0)
-            {
-                //Check for equality of children items
-                for (int i = 0; i < m_Children.Count; i++)
-                {
-                    if (!object.Equals(m_Children[i], other.m_Children[i]))
-                    {
-                        isEqual = false;
-                        break;
-                    }
-                }
-            }
-            
             return isEqual;
-        }
-
-        /// <summary>
-        /// In case array of children has not been initialized yet, initializes it.
-        /// This is needed to e.g. initialize <see cref="PathRef"/> that was constructed empty.
-        /// </summary>
-        void EnsureChildren()
-        {
-            if (m_Children == null)
-            {
-                m_Children = new List<string>();
-            }
         }
 
         public static implicit operator string(PathRef pathRef) => pathRef.ToString();
         public static implicit operator PathRef(string path) => new PathRef(path);
 
-        private int ChildCount => m_Children?.Count ?? 0;
+        private int ChildCount => m_Children.Count;
         private bool HasAnyChildren => ChildCount > 0;
         private bool HasAnyParents => m_Parents > 0;
 
@@ -431,9 +403,9 @@ namespace FlexPath
         /// </summary>
         private int m_Parents;
         /// <summary>
-        /// The name sof the children that have to be visited
+        /// The encoded array of children that have to be visited.
         /// </summary>
-        private List<string> m_Children;
+        private SegmentedPathUnsafe m_Children;
         /// <summary>
         /// True if this path contains a trailing directory separator.
         /// </summary>

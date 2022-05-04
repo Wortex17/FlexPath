@@ -374,7 +374,6 @@ namespace FlexPath.Tests
                 Assert.That(pathRef.IsRooted, Is.True);
             }
 
-
             [TestCase(@"C:/")]
             [TestCase(@"A/")]
             [TestCase(@"A/B/")]
@@ -774,7 +773,6 @@ namespace FlexPath.Tests
                 Assert.That(pathRefA.Equals(pathRefB), Is.False);
             }
 
-            [TestCase(@"")]
             [TestCase(@"./")]
             [TestCase(@"../")]
             [TestCase(null)]
@@ -868,5 +866,21 @@ namespace FlexPath.Tests
                 Assert.That(PathRef.Combine(path1, path2, path3, path4, path5), Is.EqualTo(expectedPathRef));
             }
         }
+
+        [TestFixture]
+        class Copy
+        {
+            [Test]
+            public void When_CopiedOnStack()
+            {
+                PathRef pathRef = new PathRef("A/B");
+                PathRef pathRef2 = pathRef;
+                
+                pathRef2.PointToChild("C");
+                Assert.That(pathRef, Is.Not.SameAs(pathRef2));
+                Assert.That(pathRef, Is.Not.EqualTo(pathRef2));
+            }
+        }
+        
     }
 }

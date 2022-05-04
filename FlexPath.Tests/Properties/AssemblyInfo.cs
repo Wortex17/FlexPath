@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FlexPath.Tests")]
-[assembly: AssemblyCopyright("Copyright © Patrick Michael Hopf 2019, 2020")]
+[assembly: AssemblyCopyright("Copyright © Patrick Michael Hopf 2019, 2020, 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
