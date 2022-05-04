@@ -202,7 +202,7 @@ namespace FlexPath
         public void PointToParent()
         {
             m_IsNull = false;
-            if (ChildCount > 0)
+            if (m_Children.HasAny)
             {
                 m_Children.Pop();
             }
@@ -383,8 +383,7 @@ namespace FlexPath
         public static implicit operator string(PathRef pathRef) => pathRef.ToString();
         public static implicit operator PathRef(string path) => new PathRef(path);
 
-        private int ChildCount => m_Children.Count;
-        private bool HasAnyChildren => ChildCount > 0;
+        private bool HasAnyChildren => m_Children.HasAny;
         private bool HasAnyParents => m_Parents > 0;
 
         private bool m_IsNull;

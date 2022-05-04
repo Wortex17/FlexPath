@@ -10,11 +10,10 @@ namespace FlexPath
     struct SegmentedPathUnsafe
     {
         public string Segments { get; private set; }
-        public int Count { get; private set; }
+        public bool HasAny => Segments != null;
 
         public void Push(string segment)
         {
-            Count++;
             if (String.IsNullOrEmpty(Segments))
             {
                 Segments = segment;
@@ -27,7 +26,6 @@ namespace FlexPath
 
         public void Pop()
         {
-            Count--;
             for (int i = Segments.Length-1; i >= 0; i--)
             {
                 if (Segments[i] == '/')
@@ -41,7 +39,6 @@ namespace FlexPath
         
         public void Clear()
         {
-            Count = 0;
             Segments = null;
         }
 
